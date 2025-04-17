@@ -1,5 +1,5 @@
 """
-URL configuration for models_of_clients project.
+URL configuration for models_BestBuy_clients project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from tg_bot.views import index_page
+from BestBuy_bot.views import index_page
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index_page)
