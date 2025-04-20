@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'BestBuy_bot',
     'rest_framework',
-    'BestBuy_bot'
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
