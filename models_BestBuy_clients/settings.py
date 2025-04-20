@@ -52,6 +52,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+
+
 ROOT_URLCONF = 'models_BestBuy_clients.urls'
 
 TEMPLATES = [
@@ -78,11 +89,11 @@ WSGI_APPLICATION = 'models_BestBuy_clients.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bestbuy',
+        'NAME': 'BestBuy_bot',
         'USER': 'postgres',
-        'PASSWORD': '12345',
+        'PASSWORD': '8888',
         'HOST': 'localhost',
-        'PORT': '5432',  
+        'PORT': '5432',
     }
 }
 
