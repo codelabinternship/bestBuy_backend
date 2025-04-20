@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs
+from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs, SMSCampaign
 
 
 
@@ -88,4 +88,10 @@ class RoleChoicesSerializer(serializers.ModelSerializer):
 class UserActivityLogsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserActivityLogs
+        fields = '__all__'
+
+
+class SMSCampaignSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SMSCampaign
         fields = '__all__'

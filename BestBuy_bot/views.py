@@ -77,8 +77,8 @@ def index_page(request):
 
 
 from rest_framework import viewsets
-from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, UserActivityLogs
-from .serializers import ProductSerializer, CategorySerializer, UsersSerializer, BotConfigurationSerializer, ReviewSerializer, OrderItemSerializer, RoleChoicesSerializer, UserActivityLogsSerializer
+from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, UserActivityLogs, SMSCampaign
+from .serializers import ProductSerializer, CategorySerializer, UsersSerializer, BotConfigurationSerializer, ReviewSerializer, OrderItemSerializer, RoleChoicesSerializer, UserActivityLogsSerializer, SMSCampaignSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 
@@ -129,3 +129,8 @@ class RoleChoicesViewSet(APIView):
 class UserActivityLogsViewSet(viewsets.ModelViewSet):
     queryset = UserActivityLogs.objects.all().order_by('-created_at')
     serializer_class = UserActivityLogsSerializer
+
+
+class SMSCampaignViewSet(viewsets.ModelViewSet):
+    queryset = SMSCampaign.objects.all()
+    serializer_class = SMSCampaignSerializer

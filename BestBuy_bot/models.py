@@ -173,19 +173,15 @@ class BotConfiguration(models.Model):
 
 
 
-class SMSCampaigns(models.Model):
-    campaign_id = models.AutoField(primary_key=True)  # ���������� ID ��������
-    name = models.CharField(max_length=255)
-    message = models.TextField()
-    scheduled_time = models.DateTimeField()
-    status = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"{self.name} - {'Scheduled' if self.status else 'Inactive'}"
-
-
-
-
+# class SMSCampaigns(models.Model):
+#     campaign_id = models.AutoField(primary_key=True)  # ���������� ID ��������
+#     name = models.CharField(max_length=255)
+#     message = models.TextField()
+#     scheduled_time = models.DateTimeField()
+#     status = models.BooleanField(default=True)
+#
+#     def __str__(self):
+#         return f"{self.name} - {'Scheduled' if self.status else 'Inactive'}"
 
 
 
@@ -308,3 +304,16 @@ class Reviews(models.Model):
 
     def __str__(self):
         return f"Review {self.review_id} - Product {self.product_id} - User {self.user_id}"
+
+
+
+class SMSCampaign(models.Model):
+    title = models.CharField(max_length=100)
+    message = models.TextField()
+    recipients = models.TextField(help_text="Phone numbers separated by commas")
+    created_at = models.DateTimeField(auto_now_add=True)
+    scheduled_time = models.DateTimeField(null=True, blank=True)
+    is_sent = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title

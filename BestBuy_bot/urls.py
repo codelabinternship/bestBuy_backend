@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet, CategoryViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesViewSet, UserActivityLogsViewSet
+from .views import ProductViewSet, CategoryViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesViewSet, UserActivityLogsViewSet, SMSCampaignViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -12,6 +12,7 @@ router.register(r'bot-configs', BotConfigurationViewSet)
 router.register(r'reviews', ReviewViewSet)
 router.register(r'orderitem', OrderItemViewSet)
 router.register(r'user-activity-logs', UserActivityLogsViewSet)
+router.register(r'sms-campaigns', SMSCampaignViewSet)
 
 
 
