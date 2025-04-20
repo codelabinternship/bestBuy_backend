@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'BestBuy_bot'
+    'BestBuy_bot',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -76,13 +77,14 @@ WSGI_APPLICATION = 'models_BestBuy_clients.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bestbuy',
+        'NAME': 'bestbuydb',
         'USER': 'postgres',
-        'PASSWORD': '12345',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',
-        'PORT': '5432',  
+        'PORT': '5432',
     }
 }
+
 
 
 
