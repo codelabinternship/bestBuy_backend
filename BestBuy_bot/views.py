@@ -24,12 +24,8 @@ class LoginView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
-        first_name = request.data.get('first_name')
-        last_name = request.data.get('last_name')
-        email = request.data.get('email')
         password = request.data.get('password')
-        user = authenticate(username=username, password=password, first_name=first_name, last_name=last_name,
-                            email=email)
+        user = authenticate(username=username, password=password)
 
         if user is not None:
             access_token = AccessToken.for_user(user)

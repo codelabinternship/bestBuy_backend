@@ -1,9 +1,11 @@
 from rest_framework import serializers
-from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs, SMSCampaign
+from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, UserActivityLogs, SMSCampaign
 
 
-
+import re
 from django.contrib.auth.models import User
+from .models import BadPassword
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,6 +16,29 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password')
+
+    def validate_password(self, value):
+        errors = []
+
+        if len(value) < 6:
+            errors.append("Пароль должен содержать минимум 6 символов.")
+        if not re.search(r'[A-Z]', value):
+            errors.append("Пароль должен содержать хотя бы одну заглавную букву.")
+        if not re.search(r'\d', value):
+            errors.append("Пароль должен содержать хотя бы одну цифру.")
+        if not re.search(r'[@_]', value):
+            errors.append("Пароль должен содержать хотя бы один спецсимвол (@ или _).")
+        if BadPassword.objects.filter(password__iexact=value).exists():
+            errors.append("Этот пароль слишком распространён. Пожалуйста, выберите другой.")
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return value
+
+
+
+
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -26,11 +51,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
+
+
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
-    email = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
 
 
