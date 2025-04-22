@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from BestBuy_bot.views import index_page
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -24,6 +23,8 @@ from django.urls import path, re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+from views import RegisterView, LoginView, index_page, DashboardView, CategoryViewSet, ProductViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesViewSet, UserActivityLogsViewSet, SMSCampaignViewSet, BranchesViewSet, PaymentMethodsViewSet, VariationsViewSet
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -34,7 +35,7 @@ schema_view = get_schema_view(
       license=openapi.License(name="MIT License"),
    ),
    public=True,
-   permission_classes=(permissions.AllowAny,)
+   permission_classes=[permissions.AllowAny]
 )
 
 urlpatterns = [
@@ -46,7 +47,6 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
-from BestBuy_bot.views import RegisterView, LoginView, DashboardView
 
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
@@ -55,7 +55,6 @@ from BestBuy_bot.views import RegisterView, LoginView, DashboardView
 
 
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 
 
 urlpatterns = [
@@ -69,5 +68,7 @@ urlpatterns = [
 
     path('', include('BestBuy_bot.urls')),
     path('', index_page),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -11,7 +11,8 @@ from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-
+from .models import *
+from .serializers import *
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -49,7 +50,7 @@ class LoginView(generics.GenericAPIView):
 
 
 class DashboardView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
@@ -134,3 +135,16 @@ class UserActivityLogsViewSet(viewsets.ModelViewSet):
 class SMSCampaignViewSet(viewsets.ModelViewSet):
     queryset = SMSCampaign.objects.all()
     serializer_class = SMSCampaignSerializer
+
+
+class BranchesViewSet(viewsets.ModelViewSet):
+    queryset = Branches.objects.all()
+    serializer_class = BranchesSerializer
+
+class PaymentMethodsViewSet(viewsets.ModelViewSet):
+    queryset = PaymentMethods.objects.all()
+    serializer_class = PaymentMethodsSerializer
+
+class VariationsViewSet(viewsets.ModelViewSet):
+    queryset = Variations.objects.all()
+    serializer_class = VariationsSerializer
