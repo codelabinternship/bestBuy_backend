@@ -148,3 +148,28 @@ class PaymentMethodsViewSet(viewsets.ModelViewSet):
 class VariationsViewSet(viewsets.ModelViewSet):
     queryset = Variations.objects.all()
     serializer_class = VariationsSerializer
+
+
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class OrdersViewSet(viewsets.ModelViewSet):
+    queryset = Orders.objects.all()
+    serializer_class = OrdersSerializer
+
+class ExportHistoryViewSet(viewsets.ModelViewSet):
+    queryset = ExportHistory.objects.all()
+    serializer_class = ExportHistorySerializer
+
+class ChannelPostsViewSet(viewsets.ModelViewSet):
+    queryset = ChannelPosts.objects.all()
+    serializer_class = ChannelPostsSerializer
+
+
+class LoyaltyProgramViewSet(viewsets.ModelViewSet):
+    queryset = LoyaltyProgram.objects.all()
+    serializer_class = LoyaltyProgramSerializer

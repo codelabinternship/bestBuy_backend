@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Variations, PaymentMethods, Branches, Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs, SMSCampaign
+from .models import LoyaltyProgram, ChannelPosts, Orders, Variations, PaymentMethods, Branches, Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs, SMSCampaign
 
 
 
@@ -110,4 +110,32 @@ class PaymentMethodsSerializer(serializers.ModelSerializer):
 class VariationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Variations
+        fields = '__all__'
+
+
+
+
+class ExportHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExportHistory
+        fields = '__all__'
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+class OrdersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = '__all__'
+
+
+
+class ChannelPostsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChannelPosts
+        fields = '__all__'
+
+class LoyaltyProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoyaltyProgram
         fields = '__all__'
