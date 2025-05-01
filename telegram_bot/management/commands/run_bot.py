@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 
 BOT_TOKEN = ''
 
-WEB_APP_URL = ''
+WEB_APP_URL = 'https://zein-demo.netlify.app/'
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [

@@ -26,7 +26,16 @@ class DiscountTypeChoices(models.TextChoices):
 
 
 
+class Market(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.TextField()
+    working_hours_from = models.TimeField()
+    working_hours_to = models.TimeField()
+    is_daily = models.BooleanField(default=True)
+    logo = models.ImageField(upload_to='market_logos/', blank=True, null=True)
 
+    def __str__(self):
+        return self.name
 
 
 
