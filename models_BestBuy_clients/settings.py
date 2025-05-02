@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-iza*@a*%!%j9)40j-%@5q=m%e09&u1scq*@(usx%zi0y*f4@2_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://solid-sheep-yell.loca.lt"]
 
 
 # Application definition
@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'models_BestBuy_clients.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'BestBuy_bot',
+        'NAME': 'bestbuy',
         'USER': 'postgres',
-        'PASSWORD': '8888',
+        'PASSWORD': '12345',
         'HOST': 'localhost',
         'PORT': '5432',
     }

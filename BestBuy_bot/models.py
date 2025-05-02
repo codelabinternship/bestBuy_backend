@@ -8,7 +8,6 @@ from django.utils import timezone
 
 
 
-
 class RoleChoices(models.TextChoices):
     ADMIN = 'Admin', 'Admin'
     CUSTOMER = 'Customer', 'Customer'
@@ -328,9 +327,6 @@ class SMSCampaign(models.Model):
         return self.title
 
 
-
-
-from django.db import models
 
 class BadPassword(models.Model):
     password = models.CharField(max_length=255, unique=True)

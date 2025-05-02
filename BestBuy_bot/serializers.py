@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs, SMSCampaign
+from .models import Variations, PaymentMethods, Orders, ExportHistory, ChannelPosts, LoyaltyProgram, Branches, Market, Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs, SMSCampaign
 
 
 
@@ -34,8 +34,34 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True)
 
 
+class RegisterSerializer(serializers.ModelSerializer):
+    market_name = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email', 'market_name']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        market_name = validated_data.pop('market_name')
+        password = validated_data.pop('password')
+        user = User.objects.create(**validated_data)
+        user.set_password(password)
+        user.save()
 
 
+        Market.objects.create(owner=user, name=market_name)
+
+        return user
+
+
+
+
+class MarketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Market
+        fields = '__all__'
+        read_only_fields = ['owner']
 
 
 
@@ -94,4 +120,43 @@ class UserActivityLogsSerializer(serializers.ModelSerializer):
 class SMSCampaignSerializer(serializers.ModelSerializer):
     class Meta:
         model = SMSCampaign
+        fields = '__all__'
+
+
+
+
+class OrdersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = '__all__'
+
+class ExportHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExportHistory
+        fields = '__all__'
+
+class ChannelPostsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChannelPosts
+        fields = '__all__'
+
+class LoyaltyProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoyaltyProgram
+        fields = '__all__'
+
+class BranchesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Branches
+        fields = '__all__'
+
+class PaymentMethodsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentMethods
+        fields = '__all__'
+
+
+class VariationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Variations
         fields = '__all__'
