@@ -3,11 +3,6 @@ from django.utils import timezone
 
 
 
-
-
-
-
-
 class RoleChoices(models.TextChoices):
     ADMIN = 'Admin', 'Admin'
     CUSTOMER = 'Customer', 'Customer'
@@ -76,8 +71,6 @@ class LoyaltyProgram(models.Model):
 
 
 
-
-
 class UserActivityLogs(models.Model):
     log_id = models.AutoField(primary_key=True)  # �������������� ID
     user_id = models.IntegerField()
@@ -123,10 +116,6 @@ class Promocodes(models.Model):
 
 
 
-
-
-
-
 class Branches(models.Model):
     branch_id = models.AutoField(primary_key=True)  # ���������� �������������
     name = models.CharField(max_length=255)
@@ -138,8 +127,6 @@ class Branches(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.address}"
-
-
 
 
 
@@ -209,23 +196,20 @@ class ExportHistory(models.Model):
 #�������� ������:
 
 
-class User(models.Model):
-    user_name = models.CharField(max_length=250)
-    user_id = models.IntegerField(unique=True)
-    email = models.EmailField(max_length=200)
-    phone = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
     role = models.CharField(
         max_length=20,
         choices=RoleChoices.choices,
         default=RoleChoices.CUSTOMER
     )
-    address = models.CharField(max_length=300)
-    password = models.TextField(max_length=15)
+    address = models.CharField(max_length=300, blank=True, null=True)
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.user_name
+        return self.username
+
 
 
 class Orders(models.Model):
@@ -251,11 +235,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity}x {self.product.name} in Order #{self.order.id}"
-
-
-
-
-
 
 
 
@@ -333,3 +312,41 @@ class BadPassword(models.Model):
 
     def __str__(self):
         return self.password
+
+
+from .models import User, Market
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+
+
+User = get_user_model()  # custom user modelni olish uchun
+
+def register_user(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+
+        # 1. User yaratish
+        user = User(
+            username=username,
+            email=email,
+            phone=phone,
+            address=address,
+        )
+        user.set_password(password)  # xavfsiz parol saqlash
+        user.save()
+
+        # 2. Market yaratish
+        Market.objects.create(
+            user=user,  # bu qator majburiy!
+            name=f"{username}'s Market",
+            address=address,
+            working_hours_from="09:00",
+            working_hours_to="18:00",
+            is_daily=True,
+        )
+
+        return JsonResponse({"message": "User va Market muvaffaqiyatli yaratildi."})

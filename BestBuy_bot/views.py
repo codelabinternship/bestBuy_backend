@@ -6,18 +6,20 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 # from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import AccessToken
-from django.contrib.auth.models import User
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    # permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+# class RegisterView(generics.CreateAPIView):
+#     queryset = User.objects.all()
+#     # permission_classes = (AllowAny,)
+#     serializer_class = RegisterSerializer
 
 
 class LoginView(generics.GenericAPIView):
@@ -190,3 +192,40 @@ class MarketViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+from django.http import JsonResponse
+from .models import Market
+
+User = get_user_model()
+
+def register_user(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+
+        user = User(
+            user_name=username,
+            username=username,
+            email=email,
+            phone=phone,
+            address=address,
+        )
+        user.set_password(password)
+        user.save()
+
+        Market.objects.create(
+            user=user,
+            name=f"{username}'s Market",
+            address=address,
+            working_hours_from="09:00",
+            working_hours_to="18:00",
+            is_daily=True,
+        )
+
+        return JsonResponse({"message": "User va Market muvaffaqiyatli yaratildi."})

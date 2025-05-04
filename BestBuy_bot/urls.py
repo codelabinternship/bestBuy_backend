@@ -4,6 +4,7 @@ from .views import MarketViewSet, LoyaltyProgramViewSet, ChannelPostsViewSet, Ex
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'orders', OrdersViewSet)
@@ -22,7 +23,9 @@ router.register(r'channel-posts', ChannelPostsViewSet)
 router.register(r'loyalty', LoyaltyProgramViewSet)
 router.register(r'markets', MarketViewSet, basename='market')
 
+from .views import register_user
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path("register/", register_user, name="register"),
 ]

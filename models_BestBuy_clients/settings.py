@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-iza*@a*%!%j9)40j-%@5q=m%e09&u1scq*@(usx%zi0y*f4@2_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["https://solid-sheep-yell.loca.lt"]
+ALLOWED_HOSTS =  ['127.0.0.1', 'localhost']
+
 
 
 # Application definition
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'BestBuy_bot',
     'rest_framework',
-    'drf_yasg'
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -100,6 +101,7 @@ DATABASES = {
 
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -125,6 +127,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
+
+DEFAULT_CHARSET = 'utf-8'
 
 USE_I18N = True
 
@@ -184,3 +188,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+
+AUTH_USER_MODEL = 'BestBuy_bot.User'

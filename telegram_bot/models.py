@@ -25,3 +25,5 @@ class TelegramBotConfig(models.Model):
 
     def __str__(self):
         return f"BotConfig for market {self.market.name}"
+
+
