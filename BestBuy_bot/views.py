@@ -194,38 +194,50 @@ class MarketViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-from django.contrib.auth import get_user_model
-User = get_user_model()
 from django.http import JsonResponse
-from .models import Market
+from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ValidationError
+from .models import User, Market  # modelsni import qilganingizga ishonch hosil qiling
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+@api_view(['POST'])
 def register_user(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        email = request.POST.get("email")
-        phone = request.POST.get("phone")
-        address = request.POST.get("address")
+    try:
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
 
-        user = User(
-            user_name=username,
-            username=username,
-            email=email,
-            phone=phone,
-            address=address,
-        )
-        user.set_password(password)
-        user.save()
+        if not username or not password:
+            return Response({'error': 'Username va password talab qilinadi'}, status=400)
 
-        Market.objects.create(
-            user=user,
-            name=f"{username}'s Market",
-            address=address,
-            working_hours_from="09:00",
-            working_hours_to="18:00",
-            is_daily=True,
-        )
+        if User.objects.filter(username=username).exists():
+            return Response({'error': 'Bu username allaqachon mavjud'}, status=400)
 
-        return JsonResponse({"message": "User va Market muvaffaqiyatli yaratildi."})
+        user = User.objects.create_user(username=username, email=email, password=password)
+
+        return Response({'message': 'Foydalanuvchi muvaffaqiyatli yaratildi'}, status=201)
+
+    except Exception as e:
+        print("❌ XATO:", str(e))
+        return Response({'error': str(e)}, status=500)

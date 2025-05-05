@@ -23,9 +23,10 @@ router.register(r'channel-posts', ChannelPostsViewSet)
 router.register(r'loyalty', LoyaltyProgramViewSet)
 router.register(r'markets', MarketViewSet, basename='market')
 
+
 from .views import register_user
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path("register/", register_user, name="register"),
+    path('register_user/', register_user, name='register_user'),
 ]
