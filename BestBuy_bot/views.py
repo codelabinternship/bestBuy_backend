@@ -78,7 +78,7 @@ from .models import Product, Category, User, BotConfiguration, Reviews, OrderIte
 from .serializers import VariationsSerializer, PaymentMethodsSerializer, OrdersSerializer, ExportHistorySerializer, ChannelPostsSerializer, LoyaltyProgramSerializer, BranchesSerializer, ProductSerializer, CategorySerializer, UsersSerializer, BotConfigurationSerializer, ReviewSerializer, OrderItemSerializer, RoleChoicesSerializer, UserActivityLogsSerializer, SMSCampaignSerializer
 from rest_framework.views import APIView
 from rest_framework import status
-
+from rest_framework.response import Response
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -115,11 +115,10 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
 
 
-class RoleChoicesViewSet(APIView):
+class RoleChoicesView(APIView):
     def get(self, request):
         roles = [{"key": role.name, "value": role.value} for role in RoleChoices]
         return Response(roles, status=status.HTTP_200_OK)
-
 
 
 

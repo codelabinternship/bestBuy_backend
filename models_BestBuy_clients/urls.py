@@ -24,7 +24,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.routers import DefaultRouter
-from BestBuy_bot.views import MarketViewSet, OrdersViewSet, RegisterView, LoginView, index_page, DashboardView, CategoryViewSet, ProductViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesViewSet, UserActivityLogsViewSet, SMSCampaignViewSet, BranchesViewSet, PaymentMethodsViewSet, VariationsViewSet
+from BestBuy_bot.views import MarketViewSet, OrdersViewSet, RegisterView, LoginView, index_page, DashboardView, CategoryViewSet, ProductViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesView, UserActivityLogsViewSet, SMSCampaignViewSet, BranchesViewSet, PaymentMethodsViewSet, VariationsViewSet
 router = DefaultRouter()
 
 schema_view = get_schema_view(
@@ -47,7 +47,6 @@ router.register(r'users', UserViewSet)
 router.register(r'bot-configs', BotConfigurationViewSet)
 router.register(r'reviews', ReviewViewSet)
 router.register(r'order-items', OrderItemViewSet)
-router.register(r'roles', RoleChoicesViewSet)
 router.register(r'user-logs', UserActivityLogsViewSet)
 router.register(r'sms-campaigns', SMSCampaignViewSet)
 router.register(r'branches', BranchesViewSet)
@@ -66,6 +65,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 urlpatterns = [
+    path('roles/', RoleChoicesView.as_view(), name='roles'),
     path('admin/', admin.site.urls),
     path('api/auth/register/', RegisterView.as_view(), name='auth_register'),
     path('api/auth/login/', LoginView.as_view(), name='auth_login'),
