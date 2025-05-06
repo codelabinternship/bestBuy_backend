@@ -5,9 +5,6 @@ from django.utils import timezone
 
 
 
-
-
-
 class RoleChoices(models.TextChoices):
     ADMIN = 'Admin', 'Admin'
     CUSTOMER = 'Customer', 'Customer'
@@ -238,18 +235,7 @@ class AdditionalMarket(models.Model):
         return f"{self.name} ({self.user.username})"
 
 
-class CustomUserCreationForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ('username', 'password1', 'password2')
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        if commit:
-            user.save()
-            # Создание магазина для нового пользователя
-            Market.objects.create(user=user, name=f"{user.username}'s Market")
-        return user
 
 
 class Orders(models.Model):

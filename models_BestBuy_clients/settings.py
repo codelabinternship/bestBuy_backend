@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-iza*@a*%!%j9)40j-%@5q=m%e09&u1scq*@(usx%zi0y*f4@2_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["https://solid-sheep-yell.loca.lt"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
