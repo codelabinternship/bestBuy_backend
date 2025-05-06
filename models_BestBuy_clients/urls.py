@@ -24,7 +24,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.routers import DefaultRouter
-from BestBuy_bot.views import RegisterView, LoginView, index_page, DashboardView, CategoryViewSet, ProductViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesViewSet, UserActivityLogsViewSet, SMSCampaignViewSet, BranchesViewSet, PaymentMethodsViewSet, VariationsViewSet
+from BestBuy_bot.views import MarketViewSet, OrdersViewSet, RegisterView, LoginView, index_page, DashboardView, CategoryViewSet, ProductViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesViewSet, UserActivityLogsViewSet, SMSCampaignViewSet, BranchesViewSet, PaymentMethodsViewSet, VariationsViewSet
 router = DefaultRouter()
 
 schema_view = get_schema_view(
@@ -39,15 +39,22 @@ schema_view = get_schema_view(
    permission_classes=[permissions.AllowAny]
 )
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
 
-    # Swagger
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-]
-
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+router.register(r'products', ProductViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'bot-configs', BotConfigurationViewSet)
+router.register(r'reviews', ReviewViewSet)
+router.register(r'order-items', OrderItemViewSet)
+router.register(r'roles', RoleChoicesViewSet)
+router.register(r'user-logs', UserActivityLogsViewSet)
+router.register(r'sms-campaigns', SMSCampaignViewSet)
+router.register(r'branches', BranchesViewSet)
+router.register(r'payment-methods', PaymentMethodsViewSet)
+router.register(r'variations', VariationsViewSet)
+router.register(r'orders', OrdersViewSet)
+router.register(r'markets', MarketViewSet)
 
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
