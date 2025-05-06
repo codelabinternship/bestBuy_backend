@@ -25,16 +25,6 @@ class DiscountTypeChoices(models.TextChoices):
 
 
 
-class Market(models.Model):
-    name = models.CharField(max_length=255)
-    address = models.TextField()
-    working_hours_from = models.TimeField()
-    working_hours_to = models.TimeField()
-    is_daily = models.BooleanField(default=True)
-    logo = models.ImageField(upload_to='market_logos/', blank=True, null=True)
-
-    def __str__(self):
-        return self.name
 
 
 
@@ -226,6 +216,40 @@ class User(models.Model):
 
     def __str__(self):
         return self.user_name
+
+class Market(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.TextField()
+    working_hours_from = models.TimeField()
+    working_hours_to = models.TimeField()
+    is_daily = models.BooleanField(default=True)
+    logo = models.ImageField(upload_to='market_logos/', blank=True, null=True)
+    user = models.OneToOneField(User, related_name='market', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} ({self.user.username})"
+
+
+class AdditionalMarket(models.Model):
+    user = models.ForeignKey(User, related_name='additional_markets', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.name} ({self.user.username})"
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            # Создание магазина для нового пользователя
+            Market.objects.create(user=user, name=f"{user.username}'s Market")
+        return user
 
 
 class Orders(models.Model):

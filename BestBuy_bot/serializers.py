@@ -11,19 +11,24 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
 
 class RegisterSerializer(serializers.ModelSerializer):
+    market_name = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password')
+        fields = ['username', 'email', 'password', 'market_name']
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        user.first_name = validated_data.get('first_name', '')
-        user.last_name = validated_data.get('last_name', '')
+        market_name = validated_data.pop('market_name')
+        password = validated_data.pop('password')
+
+        user = User(**validated_data)
+        user.set_password(password)
         user.save()
+
+
+        Market.objects.create(owner=user, name=market_name)
+
         return user
 
 class LoginSerializer(serializers.Serializer):
@@ -34,25 +39,6 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True)
 
 
-class RegisterSerializer(serializers.ModelSerializer):
-    market_name = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'email', 'market_name']
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        market_name = validated_data.pop('market_name')
-        password = validated_data.pop('password')
-        user = User.objects.create(**validated_data)
-        user.set_password(password)
-        user.save()
-
-
-        Market.objects.create(owner=user, name=market_name)
-
-        return user
 
 
 
