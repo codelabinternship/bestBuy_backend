@@ -224,7 +224,7 @@ class Market(models.Model):
     user = models.OneToOneField(User, related_name='market', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.name} ({self.user.username})"
+        return f"{self.name} ({self.user.user_name})"
 
 
 class AdditionalMarket(models.Model):
@@ -232,7 +232,7 @@ class AdditionalMarket(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.name} ({self.user.username})"
+        return f"{self.name} ({self.user.user_name})"
 
 
 

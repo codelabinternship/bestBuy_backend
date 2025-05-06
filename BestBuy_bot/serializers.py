@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
+        fields = ('id', 'phone', 'user_name', 'first_name', 'last_name', 'email', 'password')
 
 class RegisterSerializer(serializers.ModelSerializer):
     market_name = serializers.CharField(write_only=True)
@@ -16,7 +16,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'market_name']
+        fields = ['user_name', 'phone', 'first_name', 'last_name', 'email', 'password', 'market_name']
 
     def create(self, validated_data):
         market_name = validated_data.pop('market_name')
@@ -26,13 +26,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
 
-
         Market.objects.create(owner=user, name=market_name)
 
         return user
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
+    user_name = serializers.CharField(required=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     email = serializers.CharField(required=True)

@@ -14,5 +14,5 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
             # Создаем маркет для нового пользователя
-            Market.objects.create(user=user, name=f"{user.username}'s Market")
+            Market.objects.create(user=user, name=f"{user.user_name}'s Market")
         return user
