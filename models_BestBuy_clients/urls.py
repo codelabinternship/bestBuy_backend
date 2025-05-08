@@ -84,7 +84,7 @@ urlpatterns = [
     # Django admin
     path('admin/', admin.site.urls),
 
-    # Главная страница (если нужна)
+    # Главная страница
     path('', index_page),
 ]
 
