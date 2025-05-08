@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 # from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import AccessToken
-from django.contrib.auth.models import User
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
@@ -20,29 +19,24 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
 
-class LoginView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
+class LoginView(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            password = serializer.validated_data['password']
 
-    def post(self, request, *args, **kwargs):
-        username = request.data.get('user_name')
-        password = request.data.get('password')
-        user = authenticate(username=user_name, password=password)
+            try:
+                user = User.objects.get(email=email)
+                user_auth = authenticate(username=user.username, password=password)
 
-        if user is not None:
-            access_token = AccessToken.for_user(user)
-            return Response({
-                'access': str(access_token),
-                'user': UserSerializer(user).data
-            })
-            # refresh = RefreshToken.for_user(user)
-            # user_serializer = UserSerializer(user)
-            # return Response({
-            #     'refresh': str(refresh),
-            #     'access': str(refresh.access_token),
-            #     'user': user_serializer.data
-            # })
-        else:
-            return Response({'detail': "Invalid credentials"}, status=401)
+                if user_auth:
+                    return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+            except User.DoesNotExist:
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DashboardView(APIView):
@@ -74,8 +68,8 @@ def index_page(request):
 
 
 from rest_framework import viewsets
-from .models import Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, UserActivityLogs, SMSCampaign
-from .serializers import VariationsSerializer, PaymentMethodsSerializer, OrdersSerializer, ExportHistorySerializer, ChannelPostsSerializer, LoyaltyProgramSerializer, BranchesSerializer, ProductSerializer, CategorySerializer, UsersSerializer, BotConfigurationSerializer, ReviewSerializer, OrderItemSerializer, RoleChoicesSerializer, UserActivityLogsSerializer, SMSCampaignSerializer
+from .models import AdditionalMarket, Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, UserActivityLogs, SMSCampaign
+from .serializers import AdditionalMarketSerializer, VariationsSerializer, PaymentMethodsSerializer, OrdersSerializer, ExportHistorySerializer, ChannelPostsSerializer, LoyaltyProgramSerializer, BranchesSerializer, ProductSerializer, CategorySerializer, UsersSerializer, BotConfigurationSerializer, ReviewSerializer, OrderItemSerializer, RoleChoicesSerializer, UserActivityLogsSerializer, SMSCampaignSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -199,7 +193,30 @@ class MarketViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+class AdditionalMarketViewSet(viewsets.ModelViewSet):
+    queryset = AdditionalMarket.objects.all()
+    serializer_class = AdditionalMarketSerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class LoginView(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            password = serializer.validated_data['password']
+
+            try:
+                user = User.objects.get(email=email)
+                user_auth = authenticate(username=user.username, password=password)
+
+                if user_auth:
+                    return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+            except User.DoesNotExist:
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

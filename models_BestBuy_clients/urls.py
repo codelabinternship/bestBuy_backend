@@ -24,19 +24,19 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework.routers import DefaultRouter
-from BestBuy_bot.views import MarketViewSet, OrdersViewSet, RegisterView, LoginView, index_page, DashboardView, CategoryViewSet, ProductViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesView, UserActivityLogsViewSet, SMSCampaignViewSet, BranchesViewSet, PaymentMethodsViewSet, VariationsViewSet
+from BestBuy_bot.views import AdditionalMarketViewSet, LoginView, MarketViewSet, OrdersViewSet, RegisterView, LoginView, index_page, DashboardView, CategoryViewSet, ProductViewSet, UserViewSet, BotConfigurationViewSet, ReviewViewSet, OrderItemViewSet, RoleChoicesView, UserActivityLogsViewSet, SMSCampaignViewSet, BranchesViewSet, PaymentMethodsViewSet, VariationsViewSet
 router = DefaultRouter()
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="BestBuy Backend API",
-      default_version='v1',
-      description="Документация API для интернет-магазина BestBuy",
-      contact=openapi.Contact(email="example@example.com"),
-      license=openapi.License(name="MIT License"),
-   ),
-   public=True,
-   permission_classes=[permissions.AllowAny]
+    openapi.Info(
+        title="BestBuy Backend API",
+        default_version='v1',
+        description="Документация API для интернет-магазина BestBuy",
+        contact=openapi.Contact(email="example@example.com"),
+        license=openapi.License(name="MIT License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
 )
 
 
@@ -54,7 +54,7 @@ router.register(r'payment-methods', PaymentMethodsViewSet)
 router.register(r'variations', VariationsViewSet)
 router.register(r'orders', OrdersViewSet)
 router.register(r'markets', MarketViewSet)
-
+router.register(r'additional_markets', AdditionalMarketViewSet)
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
 #     TokenRefreshView,
@@ -65,10 +65,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 urlpatterns = [
-    path('roles/', RoleChoicesView.as_view(), name='roles'),
-    path('admin/', admin.site.urls),
+    # Аутентификация
     path('api/auth/register/', RegisterView.as_view(), name='auth_register'),
     path('api/auth/login/', LoginView.as_view(), name='auth_login'),
+
+    # Страница ролей
+    path('api/roles/', RoleChoicesView.as_view(), name='roles'),
+
+    # Прочие API endpoint'ы
     path('api/dashboard/', DashboardView.as_view(), name='dashboard'),
     path('api/', include(router.urls)),
 
@@ -77,6 +81,12 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-    # Главная страница (если есть)
+    # Django admin
+    path('admin/', admin.site.urls),
+
+    # Главная страница (если нужна)
     path('', index_page),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

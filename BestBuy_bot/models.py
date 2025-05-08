@@ -200,7 +200,7 @@ class User(models.Model):
     user_name = models.CharField(max_length=250)
     user_id = models.IntegerField(unique=True)
     email = models.EmailField(max_length=200)
-    phone = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     role = models.CharField(
         max_length=20,
