@@ -88,13 +88,15 @@ WSGI_APPLICATION = 'models_BestBuy_clients.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default':{
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bestbuy_db',
         'USER': 'postgres_user',
         'PASSWORD': 'p1zEKadq9waEB4DaIOyCqYLkQQq8p3hS',
         'HOST': 'dpg-doi7i3i4d50c73b67frg-a.oregon-postgres.render.com',
         'PORT': '5432',
+        'OPTIONS': { 'sslmode': 'require',
+                      }
     }
 }
 
