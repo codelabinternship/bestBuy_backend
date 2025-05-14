@@ -12,6 +12,10 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
+from drf_yasg.utils import swagger_auto_schema
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from drf_yasg import openapi
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -20,6 +24,7 @@ class RegisterView(generics.CreateAPIView):
 
 
 class LoginView(APIView):
+    @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -40,7 +45,15 @@ class LoginView(APIView):
 
 
 class DashboardView(APIView):
+
     permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(operation_description="Get user dashboard data", manual_parameters=[
+        openapi.Parameter('page', openapi.IN_QUERY, description="Page number", type=openapi.TYPE_INTEGER),
+    ])
+
+
+
 
     def get(self, request):
         user = request.user
@@ -119,6 +132,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
 
 class RoleChoicesView(APIView):
+    @swagger_auto_schema(rquery_serializer=RoleChoicesSerializer)
     def get(self, request):
         roles = [{"key": role.name, "value": role.value} for role in RoleChoices]
         return Response(roles, status=status.HTTP_200_OK)
@@ -174,6 +188,7 @@ class LoyaltyProgramViewSet(viewsets.ModelViewSet):
 
 
 class RegisterView(APIView):
+    @swagger_auto_schema(request_body=RegisterSerializer)
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -193,9 +208,27 @@ class MarketViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def list(self, request, *args, **kwargs):
+
+        queryset = self.get_queryset()
+
+        if request.user.is_staff:
+            queryset = queryset.filter(is_active=True)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 class AdditionalMarketViewSet(viewsets.ModelViewSet):
     queryset = AdditionalMarket.objects.all()
     serializer_class = AdditionalMarketSerializer
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['name', 'user']
+    search_fields = ['name']
+    ordering_fields = ['name']
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -203,6 +236,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class LoginView(APIView):
+    @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
