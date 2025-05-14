@@ -90,10 +90,10 @@ WSGI_APPLICATION = 'models_BestBuy_clients.wsgi.application'
 DATABASES = {
     'default':{
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bestbuy_db',
+        'NAME': 'bestbuy_db_p40x',
         'USER': 'postgres_user',
-        'PASSWORD': 'p1zEKadq9waEB4DaIOyCqYLkQQq8p3hS',
-        'HOST': 'dpg-doi7i3i4d50c73b67frg-a.oregon-postgres.render.com',
+        'PASSWORD': 'rS3pLPfpk5s7Lwh0qK32tz4IugtHdNJb',
+        'HOST': 'dpg-d0i8ufemcj7s739r1hgg-a.oregon-postgres.render.com',
         'PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require'
