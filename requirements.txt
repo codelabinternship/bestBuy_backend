@@ -6,4 +6,4 @@ gunicorn
 psycopg2-binary
 djangorestframework-simplejwt
 Pillow>=10.0
-django-filters==23.1
+django-filter==23.1
