@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-iza*@a*%!%j9)40j-%@5q=m%e09&u1scq*@(usx%zi0y*f4@2_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.0"]
+ALLOWED_HOSTS = ["bestbuy-backend-1.onrender.com"]
 
 
 # Application definition
