@@ -16,13 +16,16 @@ from drf_yasg.utils import swagger_auto_schema
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from drf_yasg import openapi
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     # permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
     @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
@@ -43,10 +46,9 @@ class LoginView(APIView):
                 return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class DashboardView(APIView):
 
-    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(operation_description="Get user dashboard data", manual_parameters=[
         openapi.Parameter('page', openapi.IN_QUERY, description="Page number", type=openapi.TYPE_INTEGER),
@@ -82,7 +84,7 @@ def index_page(request):
 
 from rest_framework import viewsets
 from .models import AdditionalMarket, Product, Category, User, BotConfiguration, Reviews, OrderItem, RoleChoices, UserActivityLogs, SMSCampaign
-from .serializers import AdditionalMarketSerializer, VariationsSerializer, PaymentMethodsSerializer, OrdersSerializer, ExportHistorySerializer, ChannelPostsSerializer, LoyaltyProgramSerializer, BranchesSerializer, ProductSerializer, CategorySerializer, UsersSerializer, BotConfigurationSerializer, ReviewSerializer, OrderItemSerializer, RoleChoicesSerializer, UserActivityLogsSerializer, SMSCampaignSerializer
+from .serializers import RegisterSerializer, AdditionalMarketSerializer, VariationsSerializer, PaymentMethodsSerializer, OrdersSerializer, ExportHistorySerializer, ChannelPostsSerializer, LoyaltyProgramSerializer, BranchesSerializer, ProductSerializer, CategorySerializer, UsersSerializer, BotConfigurationSerializer, ReviewSerializer, OrderItemSerializer, RoleChoicesSerializer, UserActivityLogsSerializer, SMSCampaignSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -101,36 +103,37 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class ProductViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class BotConfigurationViewSet(viewsets.ModelViewSet):
     queryset = BotConfiguration.objects.all()
     serializer_class = BotConfigurationSerializer
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class RoleChoicesView(APIView):
     @swagger_auto_schema(rquery_serializer=RoleChoicesSerializer)
     def get(self, request):
@@ -138,7 +141,7 @@ class RoleChoicesView(APIView):
         return Response(roles, status=status.HTTP_200_OK)
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class UserActivityLogsViewSet(viewsets.ModelViewSet):
     queryset = UserActivityLogs.objects.all().order_by('-created_at')
     serializer_class = UserActivityLogsSerializer
@@ -186,8 +189,9 @@ class LoyaltyProgramViewSet(viewsets.ModelViewSet):
     queryset = LoyaltyProgram.objects.all()
     serializer_class = LoyaltyProgramSerializer
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
+    permission_classes = [AllowAny]
     @swagger_auto_schema(request_body=RegisterSerializer)
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
@@ -199,11 +203,11 @@ class RegisterView(APIView):
 
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class MarketViewSet(viewsets.ModelViewSet):
     queryset = Market.objects.all()
     serializer_class = MarketSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -220,7 +224,7 @@ class MarketViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
+@method_decorator(csrf_exempt, name='dispatch')
 class AdditionalMarketViewSet(viewsets.ModelViewSet):
     queryset = AdditionalMarket.objects.all()
     serializer_class = AdditionalMarketSerializer
@@ -229,13 +233,15 @@ class AdditionalMarketViewSet(viewsets.ModelViewSet):
     filterset_fields = ['name', 'user']
     search_fields = ['name']
     ordering_fields = ['name']
-
+@method_decorator(csrf_exempt, name='dispatch')
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [AllowAny]
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
+    permission_classes = [AllowAny]
     @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
         serializer = LoginSerializer(data=request.data)

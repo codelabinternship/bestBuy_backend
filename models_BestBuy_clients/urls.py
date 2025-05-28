@@ -42,7 +42,7 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
-router.register(r'products', ProductViewSet)
+router.register(r'products', ProductViewSet, basename='product')
 router.register(r'users', UserViewSet)
 router.register(r'bot-configs', BotConfigurationViewSet)
 router.register(r'reviews', ReviewViewSet)
@@ -69,6 +69,7 @@ urlpatterns = [
     path('api/auth/register/', RegisterView.as_view(), name='auth_register'),
     path('api/auth/login/', LoginView.as_view(), name='auth_login'),
 
+
     # Страница ролей
     path('api/roles/', RoleChoicesView.as_view(), name='roles'),
 
@@ -86,6 +87,7 @@ urlpatterns = [
 
     # Главная страница
     path('', index_page),
+    path('', include(router.urls)),
 ]
 
 if settings.DEBUG:

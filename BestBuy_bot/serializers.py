@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.permissions import AllowAny
+
 from .models import AdditionalMarket, User, Variations, PaymentMethods, Orders, ExportHistory, ChannelPosts, LoyaltyProgram, Branches, Market, Product, Category, BotConfiguration, Reviews, OrderItem, RoleChoices, TransactionTypeChoices, UserActivityLogs, SMSCampaign
 
 
@@ -17,7 +19,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['user_name', 'phone_number', 'email', 'password', 'market_name']
+        fields = ['user_name', 'phone_number', 'email', 'password', 'market_name', 'user_id']
+
+    def validate(self, data):
+        # Проверка, например, user_id уникален
+        if User.objects.filter(user_id=data.get('user_id')).exists():
+            raise serializers.ValidationError({"user_id": "User ID must be unique."})
+        return data
 
     def create(self, validated_data):
         market_name = validated_data.pop('market_name')
@@ -30,11 +38,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         Market.objects.create(owner=user, name=market_name)
 
         return user
-
 class LoginSerializer(serializers.Serializer):
     user_name = serializers.CharField(required=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
     email = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
 
